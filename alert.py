@@ -27,10 +27,13 @@ for e in get(FEED):
     mins = (t - now).total_seconds() / 60
     key = f'{e["date"]}|{e["country"]}|{e["title"]}'
     if 0 < mins <= LEAD and key not in sent:
-        when = t.astimezone(IST).strftime("%I:%M %p IST")
-        msg = (f"🔴 {e['country']} - {e['title']}\n"
-               f"⏰ In ~{int(mins)} min ({when})\n"
-               f"Forecast: {e.get('forecast') or '-'} | Previous: {e.get('previous') or '-'}")
+        when = t.astimezone(IST)
+        msg = (f"🚨 FX NEWS ALERT\n\n"
+               f"💵 Currency - {e['country']}\n\n"
+               f"📊 {e['title']}\n\n"
+               f"📅 Release Date: {when.strftime('%d %B %Y')}\n"
+               f"⏰ Time: {when.strftime('%I:%M %p')} IST 🇮🇳\n\n"
+               f"⚠️ Increased market volatility expected. Trade with caution.")
         tg = os.environ["TG_TOKEN"]
         post(f"https://api.telegram.org/bot{tg}/sendMessage",
              {"chat_id": os.environ["TG_CHAT"], "text": msg})
